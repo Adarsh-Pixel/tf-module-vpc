@@ -13,7 +13,7 @@ resource "aws_eip" "ngw_ip" {
   vpc     = true
 
   tags = {
-    Name = "roboshop-${var.ENG}-ngw-eip"
+    Name = "roboshop-${var.ENV}-ngw-eip"
   }
 }
 
