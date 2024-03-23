@@ -9,16 +9,19 @@ resource "aws_internet_gateway" "igw" {
 }
 
 # Creates Elastic IP address which are used by the NAT gateway. Ensure EIP is provisioned first and then NAT.
-resource "aws_eip" "lb" {
-  instance = aws_instance.web.id
-  domain   = "vpc"
+resource "aws_eip" "ngw_ip" {
+  vpc     = true
+
+  tags = {
+    Name = "roboshop-${var.ENG}-ngw-eip"
+  }
 }
 
 # Creates NAT gateway and will be attached to public subnet
 
-resource "aws_nat_gateway" "example" {
-  allocation_id = aws_eip.example.id
-  subnet_id     = aws_subnet.example.id
+resource "aws_nat_gateway" "ngw" {
+  allocation_id = aws_eip.ngw_ip.id
+  subnet_id     = aws_subnet.private_subnet.*.id[0]
 
   tags = {
     Name = "gw NAT"
